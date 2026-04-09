@@ -1,7 +1,17 @@
 import axios from 'axios';
+import { getToken } from './auth';
 
 const api = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'}/api`,
+});
+
+api.interceptors.request.use((config) => {
+  const token = typeof window === 'undefined' ? null : getToken();
+  if (token) {
+    config.headers = config.headers ?? {};
+    (config.headers as Record<string, string>).Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
 
 export interface Airport {
@@ -13,6 +23,21 @@ export interface Airport {
   country: string;
   latitude: number;
   longitude: number;
+}
+
+export interface ReceiptItem {
+  name: string;
+  price: string;
+}
+
+export interface ReceiptRequest {
+  businessName: string;
+  logoUrl?: string;
+  date: string;
+  items: ReceiptItem[];
+  subtotal: string;
+  tax: string;
+  total: string;
 }
 
 export const searchAirports = async (query: string): Promise<Airport[]> => {
@@ -32,7 +57,7 @@ export const generateItinerary = async (data: {
   return response.data;
 };
 
-export const generateReceipt = async (data: any) => {
+export const generateReceipt = async (data: ReceiptRequest) => {
   const response = await api.post('/documents/receipt', data);
   return response.data;
 };

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import AirportAutocomplete from '../../components/AirportAutocomplete';
 import { Airport, generateItinerary } from '../../lib/api';
 import { Plane, Download, ArrowLeft } from 'lucide-react';
+import axios from 'axios';
 
 export default function FlightPage() {
   const [origin, setOrigin] = useState<Airport | null>(null);
@@ -38,8 +39,16 @@ export default function FlightPage() {
         destinationId: destination.id,
       });
       setPdfUrl(`${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'}${result.url}`);
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to generate itinerary');
+    } catch (err: unknown) {
+      let message = 'Failed to generate itinerary';
+      if (axios.isAxiosError(err)) {
+        const data = err.response?.data;
+        if (data && typeof data === 'object' && 'error' in data) {
+          const e = (data as { error?: unknown }).error;
+          if (typeof e === 'string') message = e;
+        }
+      }
+      setError(message);
     } finally {
       setLoading(false);
     }

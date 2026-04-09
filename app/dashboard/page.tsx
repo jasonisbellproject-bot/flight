@@ -7,7 +7,7 @@ import { useAuth } from '@/context/AuthContext';
 import { authHeaders } from '@/lib/auth';
 import { Plane, Receipt, Download, Clock, FileText, ArrowLeft } from 'lucide-react';
 
-const API = process.env.NEXT_PUBLIC_API_URL;
+const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
 interface Document {
     id: string;

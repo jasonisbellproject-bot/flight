@@ -1,9 +1,9 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { getToken, setToken, removeToken, getUser, authHeaders, type UserPayload } from '@/lib/auth';
+import React, { createContext, useContext, useState, useCallback } from 'react';
+import { setToken, removeToken, getUser, authHeaders, type UserPayload } from '@/lib/auth';
 
-const API = process.env.NEXT_PUBLIC_API_URL;
+const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
 interface AuthContextValue {
     user: UserPayload | null;
@@ -16,14 +16,8 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-    const [user, setUser] = useState<UserPayload | null>(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const u = getUser();
-        setUser(u);
-        setLoading(false);
-    }, []);
+    const [user, setUser] = useState<UserPayload | null>(() => getUser());
+    const [loading] = useState(false);
 
     const login = useCallback(async (email: string, password: string) => {
         const res = await fetch(`${API}/api/auth/login`, {
