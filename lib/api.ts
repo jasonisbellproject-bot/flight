@@ -38,6 +38,14 @@ export interface ReceiptRequest {
   subtotal: string;
   tax: string;
   total: string;
+  storePhone?: string;
+  storeEmail?: string;
+  storeAddress?: string;
+  clientName?: string;
+  clientEmail?: string;
+  clientAddress?: string;
+  paymentMethod?: string;
+  specialNote?: string;
 }
 
 export const searchAirports = async (query: string): Promise<Airport[]> => {
