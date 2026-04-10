@@ -62,4 +62,18 @@ export const generateReceipt = async (data: ReceiptRequest) => {
   return response.data;
 };
 
+export interface IdCardRequest {
+  name: string;
+  dob: string;
+  issueDate: string;
+  expiryDate: string;
+  photoUrl?: string;
+  idNumber?: string;
+}
+
+export const generateIdCard = async (data: IdCardRequest) => {
+  const response = await api.post('/documents/id_card', data);
+  return response.data;
+};
+
 export default api;

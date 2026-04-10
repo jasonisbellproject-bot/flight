@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Plane, Receipt, ArrowRight, Sparkles } from 'lucide-react';
+import { Plane, Receipt, ArrowRight, Sparkles, IdCard } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -89,6 +89,13 @@ export default function Home() {
           title="Receipt"
           description="Build itemised receipts with line items, tax calculation and totals."
           color="#818cf8"
+        />
+        <DocCard
+          href="/id-card"
+          icon={<IdCard size={22} />}
+          title="ID Card"
+          description="Generate a professional profile or membership ID card with custom details and a photo."
+          color="#34d399"
         />
       </div>
     </main>

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { authHeaders } from '@/lib/auth';
-import { Plane, Receipt, Download, Clock, FileText, ArrowLeft } from 'lucide-react';
+import { Plane, Receipt, Download, Clock, FileText, ArrowLeft, IdCard } from 'lucide-react';
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
@@ -44,6 +44,7 @@ export default function DashboardPage() {
 
     const itineraries = docs.filter(d => d.type === 'itinerary');
     const receipts = docs.filter(d => d.type === 'receipt');
+    const idCards = docs.filter(d => d.type === 'id_card');
 
     return (
         <main style={{ minHeight: '100vh', maxWidth: 800, margin: '0 auto', padding: '100px 24px 60px' }}>
@@ -68,9 +69,10 @@ export default function DashboardPage() {
 
             {/* Stats */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 16, marginBottom: 40 }}>
-                <StatCard icon={<FileText size={20} />} label="Total Documents" value={docs.length} color="#6366f1" />
-                <StatCard icon={<Plane size={20} />} label="Itineraries" value={itineraries.length} color="#818cf8" />
+                <StatCard icon={<FileText size={20} />} label="Total" value={docs.length} color="#6366f1" />
+                <StatCard icon={<Plane size={20} />} label="Itins" value={itineraries.length} color="#818cf8" />
                 <StatCard icon={<Receipt size={20} />} label="Receipts" value={receipts.length} color="#a5b4fc" />
+                <StatCard icon={<IdCard size={20} />} label="IDs" value={idCards.length} color="#10b981" />
             </div>
 
             {/* Document list */}
@@ -100,11 +102,11 @@ export default function DashboardPage() {
                                 <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                                     <div style={{
                                         width: 36, height: 36, borderRadius: 8,
-                                        background: doc.type === 'itinerary' ? 'rgba(99,102,241,0.12)' : 'rgba(129,140,248,0.12)',
+                                        background: doc.type === 'itinerary' ? 'rgba(99,102,241,0.12)' : doc.type === 'id_card' ? 'rgba(16,185,129,0.12)' : 'rgba(129,140,248,0.12)',
                                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                        color: doc.type === 'itinerary' ? '#6366f1' : '#818cf8',
+                                        color: doc.type === 'itinerary' ? '#6366f1' : doc.type === 'id_card' ? '#10b981' : '#818cf8',
                                     }}>
-                                        {doc.type === 'itinerary' ? <Plane size={16} /> : <Receipt size={16} />}
+                                        {doc.type === 'itinerary' ? <Plane size={16} /> : doc.type === 'id_card' ? <IdCard size={16} /> : <Receipt size={16} />}
                                     </div>
                                     <div>
                                         <div style={{ fontWeight: 600, fontSize: '0.9rem', textTransform: 'capitalize' }}>{doc.type}</div>
