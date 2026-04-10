@@ -1,13 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 import AirportAutocomplete from '../../components/AirportAutocomplete';
 import { Airport, generateItinerary } from '../../lib/api';
 import { Plane, Download, ArrowLeft } from 'lucide-react';
 import axios from 'axios';
 
 export default function FlightPage() {
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push('/login');
+    }
+  }, [user, authLoading, router]);
+
   const [origin, setOrigin] = useState<Airport | null>(null);
   const [destination, setDestination] = useState<Airport | null>(null);
   const [date, setDate] = useState('');
@@ -53,6 +64,8 @@ export default function FlightPage() {
       setLoading(false);
     }
   };
+
+  if (authLoading || !user) return null;
 
   return (
     <main

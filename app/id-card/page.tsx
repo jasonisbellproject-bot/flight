@@ -1,7 +1,9 @@
 'use client';
 
-import { useState, useId } from 'react';
+import { useState, useId, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 import { generateIdCard } from '../../lib/api';
 import axios from 'axios';
 import {
@@ -38,6 +40,15 @@ function FieldIcon({ icon }: { icon: React.ReactNode }) {
 
 /* ─── main component ────────────────────────────────────── */
 export default function IdCardPage() {
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push('/login');
+    }
+  }, [user, authLoading, router]);
+
   const uid = useId();
   const [name, setName] = useState('');
   const [dob, setDob] = useState('');
@@ -88,9 +99,11 @@ export default function IdCardPage() {
     }
   };
 
+  if (authLoading || !user) return null;
+
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style>{`
         .idcard-grid {
           display: grid;
           grid-template-columns: 1fr;
@@ -274,7 +287,7 @@ export default function IdCardPage() {
           opacity: 0.9;
           transform: translateY(-1px);
         }
-      `}} />
+      `}</style>
 
       <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', padding: '100px 24px 60px' }}>
         <div style={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>

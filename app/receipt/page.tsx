@@ -1,7 +1,9 @@
 'use client';
 
-import { useState, useId } from 'react';
+import { useState, useId, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 import { generateReceipt } from '../../lib/api';
 import axios from 'axios';
 import {
@@ -56,6 +58,15 @@ function FieldIcon({ icon }: { icon: React.ReactNode }) {
 
 /* ─── main component ────────────────────────────────────── */
 export default function ReceiptPage() {
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push('/login');
+    }
+  }, [user, authLoading, router]);
+
   const uid = useId();
   const [businessName, setBusinessName] = useState('');
   const [logoUrl, setLogoUrl] = useState('');
@@ -134,6 +145,8 @@ export default function ReceiptPage() {
       setLoading(false);
     }
   };
+
+  if (authLoading || !user) return null;
 
   return (
     <>
