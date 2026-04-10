@@ -18,6 +18,12 @@ import {
   FileText,
   ImageIcon,
   Link2,
+  Phone,
+  Mail,
+  MapPin,
+  User,
+  CreditCard,
+  MessageSquare
 } from 'lucide-react';
 
 interface Item {
@@ -56,6 +62,14 @@ export default function ReceiptPage() {
   const [date, setDate] = useState('');
   const [items, setItems] = useState<Item[]>([{ name: '', price: '' }]);
   const [tax, setTax] = useState('');
+  const [storePhone, setStorePhone] = useState('');
+  const [storeEmail, setStoreEmail] = useState('');
+  const [storeAddress, setStoreAddress] = useState('');
+  const [clientName, setClientName] = useState('');
+  const [clientEmail, setClientEmail] = useState('');
+  const [clientAddress, setClientAddress] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('');
+  const [specialNote, setSpecialNote] = useState('');
   const [logoError, setLogoError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
@@ -96,6 +110,14 @@ export default function ReceiptPage() {
         subtotal: subtotal.toFixed(2),
         tax: tax || '0',
         total: total.toFixed(2),
+        storePhone: storePhone || undefined,
+        storeEmail: storeEmail || undefined,
+        storeAddress: storeAddress || undefined,
+        clientName: clientName || undefined,
+        clientEmail: clientEmail || undefined,
+        clientAddress: clientAddress || undefined,
+        paymentMethod: paymentMethod || undefined,
+        specialNote: specialNote || undefined,
       });
       setPdfUrl(`${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'}${result.url}`);
     } catch (err: unknown) {
@@ -438,6 +460,63 @@ export default function ReceiptPage() {
                       </p>
                     )}
                   </div>
+
+                  {/* Optional Store Details */}
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginTop: '14px' }}>
+                    <div>
+                      <label className="label" htmlFor={`${uid}-storePhone`}>Store Phone <span style={{ fontWeight: 400, textTransform: 'none', color: 'var(--text-muted)' }}>(Optional)</span></label>
+                      <div className="icon-input-wrap">
+                        <FieldIcon icon={<Phone size={14} />} />
+                        <input id={`${uid}-storePhone`} className="input" value={storePhone} onChange={e => setStorePhone(e.target.value)} placeholder="(555) 123-4567" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="label" htmlFor={`${uid}-storeEmail`}>Store Email <span style={{ fontWeight: 400, textTransform: 'none', color: 'var(--text-muted)' }}>(Optional)</span></label>
+                      <div className="icon-input-wrap">
+                        <FieldIcon icon={<Mail size={14} />} />
+                        <input id={`${uid}-storeEmail`} type="email" className="input" value={storeEmail} onChange={e => setStoreEmail(e.target.value)} placeholder="hello@store.com" />
+                      </div>
+                    </div>
+                  </div>
+                  <div style={{ marginTop: '14px' }}>
+                    <label className="label" htmlFor={`${uid}-storeAddr`}>Store Address <span style={{ fontWeight: 400, textTransform: 'none', color: 'var(--text-muted)' }}>(Optional)</span></label>
+                    <div className="icon-input-wrap">
+                      <FieldIcon icon={<MapPin size={14} />} />
+                      <input id={`${uid}-storeAddr`} className="input" value={storeAddress} onChange={e => setStoreAddress(e.target.value)} placeholder="123 Main St, City" />
+                    </div>
+                  </div>
+                </div>
+
+                <hr className="divider" style={{ margin: '0' }} />
+
+                {/* Client Details */}
+                <div>
+                  <p className="section-label">Client Details (Billed To) <span style={{ fontWeight: 400, textTransform: 'none', color: 'var(--text-muted)' }}>(Optional)</span></p>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '14px' }}>
+                    <div>
+                      <label className="label" htmlFor={`${uid}-clientName`}>Client Name</label>
+                      <div className="icon-input-wrap">
+                        <FieldIcon icon={<User size={14} />} />
+                        <input id={`${uid}-clientName`} className="input" value={clientName} onChange={e => setClientName(e.target.value)} placeholder="Jane Doe" />
+                      </div>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+                      <div>
+                        <label className="label" htmlFor={`${uid}-clientEmail`}>Client Email</label>
+                        <div className="icon-input-wrap">
+                          <FieldIcon icon={<Mail size={14} />} />
+                          <input id={`${uid}-clientEmail`} type="email" className="input" value={clientEmail} onChange={e => setClientEmail(e.target.value)} placeholder="jane@example.com" />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="label" htmlFor={`${uid}-clientAddr`}>Client Address</label>
+                        <div className="icon-input-wrap">
+                          <FieldIcon icon={<MapPin size={14} />} />
+                          <input id={`${uid}-clientAddr`} className="input" value={clientAddress} onChange={e => setClientAddress(e.target.value)} placeholder="456 Oak St" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <hr className="divider" style={{ margin: '0' }} />
@@ -507,6 +586,29 @@ export default function ReceiptPage() {
                     <Plus size={14} />
                     Add Item
                   </button>
+                </div>
+
+                <hr className="divider" style={{ margin: '0' }} />
+
+                {/* Additional Info */}
+                <div>
+                  <p className="section-label">Additional Info <span style={{ fontWeight: 400, textTransform: 'none', color: 'var(--text-muted)' }}>(Optional)</span></p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                    <div>
+                      <label className="label" htmlFor={`${uid}-pay`}>Payment Method</label>
+                      <div className="icon-input-wrap">
+                        <FieldIcon icon={<CreditCard size={14} />} />
+                        <input id={`${uid}-pay`} className="input" value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)} placeholder="e.g. Visa ending in 4242" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="label" htmlFor={`${uid}-note`}>Special Note</label>
+                      <div className="icon-input-wrap">
+                        <FieldIcon icon={<MessageSquare size={14} />} />
+                        <input id={`${uid}-note`} className="input" value={specialNote} onChange={e => setSpecialNote(e.target.value)} placeholder="Thank you for your business!" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <hr className="divider" style={{ margin: '0' }} />
@@ -662,17 +764,29 @@ export default function ReceiptPage() {
                           >
                             {businessName || <span style={{ color: 'var(--text-muted)' }}>Business Name</span>}
                           </p>
-                          <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                          <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
                             {date
                               ? new Date(date + 'T00:00:00').toLocaleDateString('en-US', {
                                 year: 'numeric', month: 'long', day: 'numeric',
                               })
                               : 'Date not set'}
                           </p>
+                          {storePhone && <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Tel: {storePhone}</p>}
+                          {storeEmail && <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Email: {storeEmail}</p>}
+                          {storeAddress && <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{storeAddress}</p>}
                         </div>
                       </div>
 
                       <hr style={{ border: 'none', borderTop: '1px solid var(--border)', marginBottom: '14px' }} />
+
+                      {clientName && (
+                        <div style={{ marginBottom: '16px' }}>
+                          <div style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '4px' }}>Billed To</div>
+                          <div style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-primary)' }}>{clientName}</div>
+                          {clientEmail && <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{clientEmail}</div>}
+                          {clientAddress && <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{clientAddress}</div>}
+                        </div>
+                      )}
 
                       {/* Items */}
                       <div style={{ marginBottom: '16px' }}>
@@ -742,6 +856,19 @@ export default function ReceiptPage() {
                           </span>
                         </div>
                       </div>
+
+                      {paymentMethod && (
+                        <div style={{ marginTop: '16px', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                          <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>Payment Method:</span> {paymentMethod}
+                        </div>
+                      )}
+
+                      {specialNote && (
+                        <div style={{ marginTop: '12px', padding: '10px', background: 'rgba(255,255,255,0.03)', border: '1px dashed var(--border)', borderRadius: '6px', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                          <span style={{ fontWeight: 600, color: 'var(--text-primary)', display: 'block', marginBottom: '2px' }}>Note</span>
+                          {specialNote}
+                        </div>
+                      )}
                     </>
                   )}
                 </div>
