@@ -90,7 +90,7 @@ export default function IdCardPage() {
 
   return (
     <>
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         .idcard-grid {
           display: grid;
           grid-template-columns: 1fr;
@@ -274,7 +274,7 @@ export default function IdCardPage() {
           opacity: 0.9;
           transform: translateY(-1px);
         }
-      `}</style>
+      `}} />
 
       <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', padding: '100px 24px 60px' }}>
         <div style={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
