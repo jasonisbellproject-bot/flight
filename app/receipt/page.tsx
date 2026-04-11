@@ -222,14 +222,19 @@ export default function ReceiptPage() {
           background: rgba(99,102,241,0.14);
           border-color: rgba(99,102,241,0.5);
         }
-        /* preview card */
+        /* preview card container */
+        .sticky-column {
+          position: sticky;
+          top: 24px;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
         .preview-card {
           background: var(--bg-card);
           border: 1px solid var(--border);
           border-radius: var(--radius);
           overflow: hidden;
-          position: sticky;
-          top: 24px;
         }
         .preview-header {
           background: linear-gradient(135deg, rgba(99,102,241,0.18) 0%, rgba(129,140,248,0.08) 100%);
@@ -685,7 +690,7 @@ export default function ReceiptPage() {
             </div>
 
             {/* ── RIGHT: Live Preview ── */}
-            <div>
+            <div className="sticky-column">
               <div className="preview-card">
                 <div className="preview-header">
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -889,7 +894,7 @@ export default function ReceiptPage() {
 
               {/* Success banner inside right column */}
               {pdfUrl && (
-                <div className="success-banner" style={{ marginTop: '16px' }}>
+                <div className="success-banner">
                   <CheckCircle2 size={22} style={{ color: 'var(--success)', flexShrink: 0 }} />
                   <div style={{ flex: 1 }}>
                     <p style={{ fontWeight: 700, color: 'var(--success)', fontSize: '0.9rem', marginBottom: '2px' }}>
